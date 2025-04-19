@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRACTONI - Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class = "container">
+        <div class="authorization-container">
+            <h1 class="title">PRACTONI</h1>
+            <h2 class="subtitle">Returning User Login</h2>
+            <form class="authorization-form" action="/submit_login" method="POST"> <!-- action="/login" method="POST" ??-->
+                <div class="username-form">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                </div>
+                <div class="password-form">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="authorization-btn">Login</button>
+            </form>
+
+            <p class="forgot-password"> <a href="#">Forgot your password?</a></p> <!-- href="reset.html" -->
+            <p class="new-user">New user? <a href="#">Create an account</a></p> <!-- href="signup.html" -->
+            <p class="tagline">Keep track of your practice! <br> Create tasks you hope to accomplish. </p>
+        </div>
+    </div>
+</body>
+</html>

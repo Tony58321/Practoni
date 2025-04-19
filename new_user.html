@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRACTONI - Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="authorization-container">
+        <h1 class="title">PRACTONI</h1>
+        <h2 class="subtitle">Sign Up!</h2>
+        <form class="authorization-form" action="/submit_signup" method="POST">
+            <div class="username-form">
+                <label for="username">Username:</label>
+                <input type="text" name="username" placeholder="Enter a username" required>
+            </div>
+            <div class="email-form">
+                <label for="email">Email:</label>
+                <input type="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="password-form">
+                <label for="password">Password:</label>
+                <input type="password" name="password" placeholder="Enter a password" required>
+            </div>
+            <div class="password-form">
+                <label for="confirm-password">Confirm Password:</label>
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="Re-enter password" required>
+            </div>
+            
+            <button type="submit" class="authorization-btn">Sign Up</button>
+        </form>
+    </div>
+</body>
+</html>
