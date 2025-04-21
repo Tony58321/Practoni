@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { doc, updateDoc } from "firebase/firestore";
+import { auth, db } from "./firebase/firebase"; // Import the Firestore database instance
 import "./style.css";
 
 // This page will let the user select their difficulty level
@@ -7,11 +9,30 @@ function SignupSettingsPage() {
   const [selected, setSelected] = useState(null);
   const navigate = useNavigate();
 
-  const handleSelect = (level) => {
+  const handleSelect = async (level) => {
     setSelected(level);
-    navigate("/dashboard"); // Redirect to the dashboard after selection
     console.log("Selected difficulty level:", level); // For debugging purposes
-    // TODO: Save the selected level to the user's profile in the database
+
+    // Save the selected level to Firestore (assuming user is authenticated)
+    try {
+      const user = auth.currentUser;
+
+      if (!user) {
+        console.error("No user is currently logged in.");
+        return;
+      }
+
+      const userRef = doc(db, "users", user.uid); // Reference to the user's document in Firestore
+
+      await updateDoc(userRef, {
+        difficulty: level // Update the difficulty level in Firestore
+      });
+    
+    
+    navigate("/dashboard"); // Redirect to the dashboard after selection
+    } catch (error) {
+      console.error("Error updating difficulty level:", error);
+    }
   };
 
   return (
