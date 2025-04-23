@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./tasks.css"; // Optional custom styling
+import { getUserTasks, addUserTask, updateUserTask, deleteUserTask } from "./firebase/tasks";
 
 // This is the bulk of the code for the task management system
 // It includes the task list, adding new tasks, editing existing tasks, and deleting tasks
@@ -21,19 +22,39 @@ function PracticeTasks() {
     frequency: ""
   });
 
+  // This function is used to fetch the tasks from the database upon loading
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const fetchedTasks = await getUserTasks();
+        setTasks(fetchedTasks);
+      } catch (err) {
+        console.error("Failed to load tasks:", err.message);
+      }
+    };
+  
+    fetchTasks();
+  }, []);
+  
+
   // This function handles the change in the input fields for adding new tasks
   const handleChange = (e) => {
     setTaskData({ ...taskData, [e.target.name]: e.target.value });
   };
 
   // This function handles the submission of the form for adding new tasks
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setTasks([...tasks, taskData]); // Add the new task to the list
-    setTaskData({ name: "", description: "", frequency: "" }); // Reset the form fields
-    setShowPopup(false); // Close the popup
-    console.log("Task being added:", taskData);
-    // TODO: Add task to the database
+    try {
+      const newTask = await addUserTask(taskData); // Here we add the task to the database
+      console.log("Task added:", newTask);
+      setTasks([...tasks, newTask]); // Add the new task to the list
+      setTaskData({ name: "", description: "", frequency: "" }); // Reset the form fields
+      setShowPopup(false); // Close the popup
+      console.log("Task being added:", taskData);
+    } catch (err) {
+      console.error("Error adding task:", err.message);
+    }
   };
 
   // This function marks a task as done by removing it from the list
@@ -45,23 +66,35 @@ function PracticeTasks() {
   
   // This function handles the saving of edited tasks
   // It updates the task at the given index with the new data
-  const saveEdit = () => {
-    const updatedTasks = [...tasks];
-    updatedTasks[editingTask] = editData;
-    setTasks(updatedTasks);
-    setEditingTask(null); // Close the modal after saving
-    // TODO: Update task in the database
+  const saveEdit = async () => {
+  const taskToUpdate = tasks[editingTask]; // Get the task being edited
+
+    try{
+      await updateUserTask(taskToUpdate.id, editData); // Here we update the task in the database
+
+      const updatedTasks = [...tasks]; 
+      updatedTasks[editingTask] = { ...taskToUpdate, ...editData }; // Update the task in the list
+      setTasks(updatedTasks);
+      setEditingTask(null); // Close the modal after saving
+    } catch (err) {
+      console.error("Error updating task:", err.message);
+    }
   };
   
   // This function handles the deletion of tasks
   // It removes the task at the given index from the list
-  const deleteTask = () => {
+  const deleteTask = async () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this task?");
-    if (confirmDelete) {
+    if (!confirmDelete) return; // If the user cancels, do nothing
+
+    const taskToDelete = tasks[editingTask]; // Get the task being deleted
+    try {
+      await deleteUserTask(taskToDelete.id); // Here we delete the task from the database
       const updatedTasks = tasks.filter((_, index) => index !== editingTask);
       setTasks(updatedTasks);
       setEditingTask(null); // Close the modal after deletion
-      //TODO: Delete task from the database
+    } catch (err) {
+      console.error("Error deleting task:", err.message);
     }
   };
   
@@ -121,10 +154,12 @@ function PracticeTasks() {
       <ul className="tagline mt-4">
         {/* Here we loop through the tasks array and show them to the user*/}
         {tasks.map((task, index) => (
+          task && ( // Check if task is not null or undefined 
           <li key={index} className="task-item">
           <div className="task-content">
             <strong>{task.name}</strong>
           </div>
+        
         
           {/* The edit button here will open the edit modal and set the current task data */}
           <div className="task-btn-group">
@@ -139,7 +174,7 @@ function PracticeTasks() {
           </div>
         </li>
         
-        ))}
+        )))}
 
       </ul>
 
