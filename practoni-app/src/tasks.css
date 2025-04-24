@@ -99,7 +99,7 @@ button {
   width: 100%;
   padding: 10px;
   background: white;
-  color: #6a11cb; 
+  /* color: #6a11cb;  */
   border: none;
   border-radius: 5px;
   font-size: 16px;
@@ -109,7 +109,12 @@ button {
   margin-bottom: 20px;
 }
 
-.delete-btn {
+.submit-btn {
+  color: #049208;
+}
+
+
+.delete-btn{
   box-sizing: border-box;
   width: 100%;
   padding: 10px;
@@ -123,10 +128,21 @@ button {
   text-align: center;
 }
 
+.cancel-btn {
+  background: white;
+  color: black;
+}
+
+
 .edit-btn, .done-btn {
-  color: #6a11cb; 
+  color: #6a11cb;
   background-color: white;
   justify-content: space-evenly;
+}
+
+.done-btn {
+  background-color: #049208;
+  color: white;
 }
 
 select {
@@ -149,4 +165,5 @@ select {
   cursor: pointer;
   font-weight: bold;
   text-align: center;
+  width: 160px;
 }

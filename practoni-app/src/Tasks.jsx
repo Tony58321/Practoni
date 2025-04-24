@@ -191,7 +191,7 @@ function PracticeTasks() {
             }}>Edit</button>
         
             <button className="task-btn done-btn" onClick={() => markTaskDone(index)}>
-              Done
+              Mark As Done
             </button>
           </div>
         </li>
