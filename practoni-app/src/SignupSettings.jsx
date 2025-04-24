@@ -41,7 +41,7 @@ function SignupSettingsPage() {
       <p className="subtitle">Choose the level you feel most comfortable at</p>
 
       <div className="difficulty-options">
-        {["Easy", "Medium", "Hard"].map((level) => (
+        {["Beginner", "Intermediate", "Advanced"].map((level) => (
           <button
             key={level}
             onClick={() => handleSelect(level)}
