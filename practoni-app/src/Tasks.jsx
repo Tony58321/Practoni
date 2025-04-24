@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./tasks.css"; // Optional custom styling
 import { getUserTasks, addUserTask, updateUserTask, deleteUserTask } from "./firebase/tasks";
+import { getRepertoire, getUserDifficulty, getRandomPiece } from "./firebase/generateRepertoire"; // This is where we get the repertoire data
 
 // This is the bulk of the code for the task management system
 // It includes the task list, adding new tasks, editing existing tasks, and deleting tasks
@@ -97,6 +98,27 @@ function PracticeTasks() {
       console.error("Error deleting task:", err.message);
     }
   };
+
+  async function generateWarmup(type = "Etude") {
+    try {
+      const difficulty = await getUserDifficulty();
+      const rep = await getRepertoire();
+      const piece = getRandomPiece(rep, difficulty, type);
+  
+      if (piece) {
+        // Here we can show the piece to the user in a popup or alert
+        // TODO: make a popup for this
+        alert(`We suggest ${piece.Title} by ${piece.Composer}. The piece is considered a ${piece.Level} level!`);
+      } else {
+        alert("No matching pieces found for your level.");
+      }
+    } catch (err) {
+      console.error("Error generating warm-up:", err);
+      alert("Something went wrong while generating your warm-up.");
+    }
+  }
+  
+  
   
   return (
     <div className="authorization-container">
@@ -229,6 +251,13 @@ function PracticeTasks() {
 
       <button onClick={() => setShowPopup(true)} className="authorization-btn">
         Add New Task
+      </button>
+
+      <button onClick={() => generateWarmup("Etude")} className="generate-btn">
+        Generate Etude
+      </button>
+      <button onClick={() => generateWarmup("Solo")} className="generate-btn">
+        Generate Solo
       </button>
     </div>
   );
